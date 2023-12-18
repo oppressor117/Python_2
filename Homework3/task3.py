@@ -1,0 +1,45 @@
+
+# 3. Создайте словарь со списком вещей для похода
+# в качестве ключа и их массой в качестве значения.
+# Определите какие вещи влезут в рюкзак передав
+# его максимальную грузоподъёмность.
+# Достаточно вернуть один допустимый вариант.
+# *Верните все возможные варианты комплектации рюкзака.
+
+carrying_capacity_backpack = int(input('Введите грузоподъемность рюкзака: '))
+
+list_of_equipment = {'Палатка': 4,
+                     'Спальник': 1.5,
+                     'Вода': 3,
+                     'Еда': 4,
+                     'Одежда': 5,
+                     'Котелок и ЧВЛ': 1.5,
+                     'Топор': 1}
+
+
+def sort_list(some_set: set):
+    global global_list
+    if len(some_set) == 1:
+        return some_set
+    else:
+        for item in some_set:
+            new_set = some_set.copy()
+            new_set.remove(item)
+            global_list.add(tuple(sort_list(new_set)))
+    return some_set
+
+
+list_of_equipment = dict(sorted(list_of_equipment.items(), key=lambda x: x[1]))
+global_list = {tuple(list_of_equipment)}
+sort_list(set(list_of_equipment))
+
+print(f'В рюкзак грузоподъемностью {carrying_capacity_backpack}кг может влезть:')
+
+for stack in global_list:
+    summ_stack = 0
+    for item in stack:
+        summ_stack += list_of_equipment.get(item)
+        if summ_stack > carrying_capacity_backpack:
+            break
+    else:
+        print(*stack, 'весом', summ_stack, 'кг')
